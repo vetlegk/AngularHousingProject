@@ -50,12 +50,12 @@ export class LoginComponent {
     const email = this.loginForm.get('email')?.value || '';
     const password = this.loginForm.get('password')?.value || '';
 
-    this.authService.login(email, password).then((isLoggedIn) => {
-      if (isLoggedIn) {
-        this.router.navigate(['/home']);
+    this.authService.login(email, password).then((success) => {
+      if (!success) {
+        this.loginForm.reset();
       } else {
-        alert('Invalid email or password. Please try again.');
+        this.router.navigate(['']);
       }
-    });
+    })
   }
 }
