@@ -100,5 +100,12 @@
             "wifi": true,
             "laundry": true
         }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "email": "vetle@example.no",
+            "password": "passord123"
+        }
     ]
 }
