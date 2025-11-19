@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
           <button type="button" class="primary" (click)="logout()">Logout</button>
       </header>
 
-      <section class="content">
+      <section>
         <router-outlet></router-outlet>
       </section>
     </main>

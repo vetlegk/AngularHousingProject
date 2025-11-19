@@ -20,16 +20,18 @@ export class AuthService {
 
   constructor() { 
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    this.isLoggedInSubject.next(isLoggedIn);
+    if (isLoggedIn) {
+      this.isLoggedInSubject.next(isLoggedIn);
 
-    const storedToken = localStorage.getItem('authToken');
-
-    if (storedToken && storedToken !== '') {
-      this.authTokenSubject.next(storedToken);
+      const storedToken = localStorage.getItem('authToken');
+      if (storedToken && storedToken !== '') {
+        this.authTokenSubject.next(storedToken);
+      }
       return;
     }
 
-    localStorage.setItem('authToken', '');
+    localStorage.setItem('isLoggedIn', 'false');
+    localStorage.setItem('authToken', ''); 
   }
 
   async login(email: string, password: string): Promise<boolean> {

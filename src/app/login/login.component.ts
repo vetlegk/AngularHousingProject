@@ -9,23 +9,21 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <section>
-      <h1>
-        Welcome to the <span>Homes</span> application!
-      </h1>
-      <section>
+    <main>
+        <header>
+          <img class="logo" src="assets/logo.svg" alt="logo" />
+          <p><i>Your next home awaits!</i></p>
+        </header>
+      <section class="login-section">
         <h2>Login</h2>
-        <form [formGroup]="loginForm" (submit)="submitLogin()">
-          <label for="email">Email:</label>
-          <input id="email" type="email" formControlName="email" />
+        <form class="login-form" [formGroup]="loginForm" (submit)="submitLogin()">
+          <input id="email" type="email" formControlName="email" placeholder="Email:" />
+          <input id="password" type="password" formControlName="password" placeholder="Password:" />
 
-          <label for="password">Password:</label>
-          <input id="password" type="password" formControlName="password" />
-
-          <button type="submit">Log In</button>
+          <button class="primary" type="submit">Log In</button>
         </form>
       </section>
-    </section>
+    </main>
   `,
   styleUrls: ['./login.component.css']
 })
