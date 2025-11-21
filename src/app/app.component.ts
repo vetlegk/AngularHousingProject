@@ -1,9 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { HomeComponent } from './home/home.component';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
-
 
 @Component({
   standalone: true,
@@ -12,7 +10,7 @@ import { CommonModule } from '@angular/common';
     <main>
       <header *ngIf="isLoggedIn$ | async">
           <img class="logo" src="assets/logo.svg" alt="logo" />
-          <p *ngIf="authToken$ | async as userEmail" class="alert-text">Logged in as: {{userEmail}}</p>
+          <p *ngIf="authToken$ | async" class="alert-text">Logged in as: {{authToken$}}</p>
           <p *ngIf="showAlert">{{alertText}}</p>
           <button type="button" class="primary" (click)="logout()">Logout</button>
       </header>
@@ -30,14 +28,13 @@ export class AppComponent {
   authService: AuthService = inject(AuthService);
   router = inject(Router);
 
-  title = 'homes';
   showAlert = false;
   alertText = '';
 
   isLoggedIn$ = this.authService.isLoggedIn$
   authToken$ = this.authService.authToken$
 
-  constructor() {};
+  constructor() {}
 
   logout() {
     if (this.authService.logout()) {
@@ -45,25 +42,14 @@ export class AppComponent {
     };
   }
 
-  login() {
-    if (this.isLoggedIn$) {
-      this.setAlert('');
-      this.router.navigate(['/homes']);
-
-    } else {
-      this.setAlert('Please log in to continue.')
-      this.router.navigate(['']);
-    }
-  }
-
   setAlert(message: string) {
     if (message != '') {
       this.alertText = message;
       this.showAlert = true;
       return;
-    } 
+    };
 
-    this.alertText
+    this.alertText = message;
     this.showAlert = false;
   }
 }

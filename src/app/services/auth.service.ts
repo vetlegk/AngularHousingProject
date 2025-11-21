@@ -7,7 +7,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 
 export class AuthService {
-
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   private authTokenSubject = new BehaviorSubject<string>('');
 
@@ -34,12 +33,12 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<boolean> {
-    return await this.checkUserCredentials(email, password).then( isSuccessful => {
-      if (isSuccessful) {
+    return await this.checkUserCredentials(email, password).then(value => {
+      if (value != null) {
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('authToken', email); // Using email as a simple token
+        localStorage.setItem('authToken', value);
         this.isLoggedInSubject.next(true);
-        this.authTokenSubject.next(email);
+        this.authTokenSubject.next(value);
         return true;
       }
       return false;
@@ -56,7 +55,8 @@ export class AuthService {
   }
 
   async register(email: string, password: string): Promise<boolean> {
-    const id = crypto.randomUUID();
+    const id = crypto.randomUUID(); // This will practically always return a unique number.
+
     const res = await fetch(this.url, {
       method: 'POST',
       headers: {
@@ -66,19 +66,19 @@ export class AuthService {
     });
     
     if (res.ok) {
-      return this.login(email, password);
-    }
+      return this.login(email, password) ?? false;
+    };
     return false;
   }
 
-  async checkUserCredentials(email: string, password: string): Promise<boolean> {
+  async checkUserCredentials(email: string, password: string): Promise<string | null> {
     const res = await fetch(`${this.url}?email=${email}&password=${password}`);
 
     return await res.json().then(data => {
       if (data.length > 0 && data[0].email === email && data[0].password === password) {      
-        return true;
+        return data.id;
       }
-      return false;
+      return null;
     });
   }
 }

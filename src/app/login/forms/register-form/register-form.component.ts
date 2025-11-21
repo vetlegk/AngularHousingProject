@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -18,17 +18,17 @@ import { Router } from '@angular/router';
 
       <div class="button-group">
         <button class="primary" type="submit">Confirm</button>
-        <button class="primary" type="button" (click)="toggleRegisterForm()">Existing Account ?</button>
+        <button class="primary" type="button" (click)="setLoginForm.emit()">Existing Account ?</button>
       </div>
     </form>
   `,
   styleUrls: ['../../login.component.css']
 })
+
 export class RegisterFormComponent {
+  @Output() setLoginForm = new EventEmitter<void>();
   authService: AuthService = inject(AuthService);
-  loginComponent: LoginComponent = inject(LoginComponent);
   router = inject(Router);
-  isRegistering = this.loginComponent.isRegistering$;
 
   email = new FormControl('');
   password = new FormControl('');
@@ -40,9 +40,7 @@ export class RegisterFormComponent {
     confirmPassword: new FormControl(''),
   });
 
-  toggleRegisterForm() {
-    this.loginComponent.toggleRegisterForm();
-  }
+  constructor() {}
 
   async submitRegister() {
     const email = this.registerForm.get('email')?.value || '';
